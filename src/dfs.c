@@ -6,58 +6,57 @@
 #include <stdlib.h>		/* abort */
 #include <stdbool.h>		/* bool, true, false */
 #include "dfs.h"
+#include <assert.h>
 
-
-void DFT (node * root)
+void DFT (bnode * root)
 {
 	// Implement DFS
 	// Hint: You can use print_node, print_tree and/or print_stack.
-  stack s;
-  // create empty stack
-  s.node = root;
-  s.next = NULL;
+  stack *s = malloc(sizeof(stack));
+  // create empty sstack
+  //s.node = root;
+  //.next = NULL;
+  
+push(s, root);
 
-  while(!isEmpty(&root->num))
+
+  while(!isEmpty(s))
   {
-  if(root->lchild !=NULL && root->rchild != NULL)
-    {
-    // push root
-    print_node(root);
-    pop(&s);
-    push(&s, root->rchild);
-    push(&s, root->lchild);
-    }
-  else if(root->lchild == NULL && root->rchild != NULL)
-    {
-    print_node (root);
-    pop(&s);
-    push(&s, root->rchild);
-    }
-  else if(root->lchild != NULL && root->lchild == NULL)
-    {
-    print_node(root);
-    pop(&s);
-    push(&s, root->lchild);
-    }
-  else
-    {
-    print_node(root);
-    pop(&s);
-    }
+bnode* popped = pop(s);
+ 
+  printf("%d\n", popped->num);
+
+ 
+ if ( popped->rchild!= NULL)
+ {
+  push(s, popped->rchild);
+  /* code */
+ }
+ 
+if ( popped->lchild!= NULL)
+ {
+  push(s, popped->lchild);
+  /* code */
+ }
   }
+
+
 }
 
-node *make_node (int num, node * left, node * right)
+bnode *make_node (int num, bnode * left, bnode * right)
 {
-	return 0;
+  bnode* n = malloc(sizeof(bnode));
+  n->num = num;
+  n->lchild=left;
+  n->rchild =right;
+
+
+
+	return n;
 }
 
-void free_node (node * p)
-{
 
-}
-
-
+/*
 void print_node (node * p)
 {
 
@@ -89,43 +88,51 @@ void print_tree (node * p, int depth)
     print_tree (p->rchild, depth + 1);
 }
 
-stack *push (stack * topp, node * node)
+*/
+void push (stack * s, bnode * bn)
 {
-  stack *new_top = topp;
-  stack *s = malloc(sizeof(stack));
-  s->node = node;
-  s->next = new_top;
-  topp->next = new_top;
+  node *n = malloc(sizeof(node));
+  n->data=bn;
+  n->next= s->top;
+  s->top=n;
+
+  
 }
 
-bool isEmpty (stack * topp)
+bool isEmpty (stack * s)
 {
-  if(topp == NULL)
-  return true;
-  else
-  return false;
+  return s->top == NULL;
+
 }
 
-node *top (stack * topp)
-{
-  return 0;
-}
 
 // Utility function to pop topp  
 // element from the stack 
 
-stack *pop (stack * topp)
+bnode *pop (stack * s)
 {
-  stack *freeing = topp;
-  int pop_top = topp->node->num;
-  topp = topp->next;
-  free(freeing);
-	return pop_top;
+  assert(s);
+
+  if (s->top == NULL)
+  {
+    return NULL;
+  }
+
+  node* tmp =s->top;
+
+
+  bnode*bn = tmp->data;
+  s->top= tmp->next;
+
+  free(tmp);
+  
+  return bn;  
 }
 
-void print_stack (stack * topp)
+/*
+void print_stack (stack * s)
 {
-  struct stack *temp = topp;
+  struct stack *temp = s;
 
   while (temp != NULL)
     {
@@ -140,3 +147,4 @@ void print_stack (stack * topp)
 
   return;
 }
+*/

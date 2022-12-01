@@ -1,37 +1,43 @@
 #include <stdbool.h>		/* bool, true, false */
 
-typedef struct node
+typedef struct bnode
 {
   int num;
-  bool visited;
-  struct node *lchild;
-  struct node *rchild;
+  struct bnode *lchild;
+  struct bnode *rchild;
+} bnode;
+
+typedef struct node
+{
+   bnode *data;
+  struct node *next;
 } node;
 
 
-node *make_node (int num, node * left, node * right);
+typedef struct stack
+{
+  node* top;
+} stack;
 
-void free_node (node * p);
+
+bnode *make_node (int num, bnode * left, bnode * right);
+
+//void free_node (node * p);
 
 void print_node (node * p);
 
 void print_tree (node * p, int depth);
 
-void DFT (node * root);
-
-typedef struct stack
-{
-  struct node *node;
-  struct stack *next;
-} stack;
+void DFT (bnode * root);
 
 
-stack *push (stack * topp, node * node);
+
+void push (stack * topp, bnode * node);
 
 bool isEmpty (stack * topp);
 
-node *top (stack * topp);
+bnode *top (stack * topp);
 
-stack *pop (stack * topp);
+bnode *pop (stack * topp);
 
 void print_stack (stack * topp);
